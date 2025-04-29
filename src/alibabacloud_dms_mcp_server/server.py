@@ -67,7 +67,7 @@ async def getInstance(host: str, port: int, sid: Optional[str] = None) -> Dict[s
         instance = data.get('Instance', {})
         return instance
     except Exception as error:
-        logging(error)
+        logging.error(error)
         raise error
 
 
@@ -123,7 +123,7 @@ async def searchDatabase(searchKey: str, pageNumber: int = 1, pageSize: int = 20
         db_list = search_db_list.get('SearchDatabase', [])
         return db_list
     except Exception as error:
-        logging(error)
+        logging.error(error)
         raise error
 
 
@@ -175,7 +175,7 @@ async def getDatabase(host: str, port: int, schemaName: str, sid: Optional[str] 
         database = data.get('Database', {})
         return database
     except Exception as error:
-        logging(error)
+        logging.error(error)
         raise error
 
 
@@ -194,7 +194,6 @@ async def getDatabase(host: str, port: int, schemaName: str, sid: Optional[str] 
                 - TableGuid: Unique table identifier
           """)
 async def searchTable(searchKey: str) -> List[Dict[str, Any]]:
-
     if not isinstance(searchKey, str) or not searchKey.strip():
         logging.error("Invalid searchKey parameter: %s", searchKey)
         raise ValueError("searchKey must be a non-empty string")
@@ -237,7 +236,6 @@ async def searchTable(searchKey: str) -> List[Dict[str, Any]]:
 
           """)
 async def listTables(databaseId: int, searchName: str, pageNumber: int = 1, pageSize: int = 200) -> Dict[str, Any]:
-
     client = create_client()
     list_table_request = dms_enterprise_20181101_models.ListTablesRequest(
         search_name=searchName, database_id=databaseId, page_number=pageNumber, page_size=pageSize, return_guid=True)
@@ -288,6 +286,50 @@ async def getMetaTableDetailInfo(tableGuid: str) -> Dict[str, Any]:
         data = response.body.to_map()
         detail_info = data.get('DetailInfo', {})
         return detail_info
+    except Exception as error:
+        logging.error(error)
+        raise error
+
+
+@mcp.tool(name="executeScript",
+          description="""
+             Execute SQL script against a database in DMS and return structured results.
+          Parameters:
+            databaseId (int): Required DMS databaseId. Obtained via getDatabase tool.
+            script (str): SQL script to execute.
+          Returns:
+            Dict[str, Any] containing:
+                - RequestId (str): Unique request identifier
+                - Results (List[Dict]): List of result sets from executed script:
+                    Each result set contains:
+                        - ColumnNames (List[str]): Ordered list of column names
+                        - RowCount (int): Number of rows returned
+                        - Rows (List[Dict[str, str]]): List of rows with column name -> value mapping
+                        - Success (bool): Whether this result set was successfully retrieved
+            - Success (bool): Overall operation success status    
+
+          """)
+async def executeScript(databaseId: int, script: str, logic: bool = False) -> Dict[str, Any]:
+    if not isinstance(databaseId, int) or databaseId <= 0:
+        error_msg = f"Invalid databaseId parameter: {databaseId!r}"
+        logging.error(error_msg)
+        raise ValueError("databaseId must be a positive integer")
+
+    if not isinstance(script, str) or not script.strip():
+        error_msg = "Script parameter must be a non-empty string"
+        logging.error(error_msg)
+        raise ValueError(error_msg)
+
+    client = create_client()
+    execute_script_request = dms_enterprise_20181101_models.ExecuteScriptRequest(
+        db_id=databaseId, script=script, logic=logic)
+    try:
+        response = client.execute_script(execute_script_request)
+        if response is None or not hasattr(response, 'body') or response.body is None:
+            logging.warning("Empty or invalid response received from DMS service")
+            return []
+        data = response.body.to_map()
+        return data
     except Exception as error:
         logging.error(error)
         raise error
