@@ -5,6 +5,10 @@ build/
 dist/
 wheels/
 *.egg-info
+.idea
+.DS_Store
+*.iml
+/*.iml
 
 # Virtual environments
 .venv
