@@ -71,20 +71,20 @@ async def getInstance(host: str, port: int, sid: Optional[str] = None) -> Dict[s
         raise error
 
 
-@mcp.tool(name="syncInstanceMeta",
-          description="Sync instance meta", )
-async def syncInstanceMeta(InstanceId: str, IgnoreTable: bool = False) -> Dict[str, Any]:
-    client = create_client()
-    sync_instance_meta_request = dms_enterprise_20181101_models.SyncInstanceMetaRequest(
-        instance_id=InstanceId)
-    if IgnoreTable:
-        sync_instance_meta_request.ignore_table = IgnoreTable
-    try:
-        data = client.sync_instance_meta(sync_instance_meta_request)
-        return data.body.to_map()
-    except Exception as error:
-        print(error)
-        raise error
+# @mcp.tool(name="syncInstanceMeta",
+#           description="Sync instance meta", )
+# async def syncInstanceMeta(InstanceId: str, IgnoreTable: bool = False) -> Dict[str, Any]:
+#     client = create_client()
+#     sync_instance_meta_request = dms_enterprise_20181101_models.SyncInstanceMetaRequest(
+#         instance_id=InstanceId)
+#     if IgnoreTable:
+#         sync_instance_meta_request.ignore_table = IgnoreTable
+#     try:
+#         data = client.sync_instance_meta(sync_instance_meta_request)
+#         return data.body.to_map()
+#     except Exception as error:
+#         print(error)
+#         raise error
 
 
 @mcp.tool(name="searchDatabase",
