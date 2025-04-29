@@ -1,0 +1,25 @@
+[project]
+name = "alibabacloud-dms-mcp-server"
+version = "0.1.0"
+description = "MCP Server for AlibabaCloud DMS"
+readme = "README.md"
+authors = [
+    { name = "AlibabaCloud DMS" }
+]
+requires-python = ">=3.12"
+dependencies = [
+    "alibabacloud-dms-enterprise20181101>=1.70.2",
+    "httpx>=0.28.1",
+    "mcp[cli]>=1.6.0",
+]
+
+license = "Apache-2.0"
+license-files = ["LICENSE"]
+
+
+[project.scripts]
+alibabacloud-dms-mcp-server = "alibabacloud_dms_mcp_server.server:main"
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
