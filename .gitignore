@@ -5,7 +5,9 @@ build/
 dist/
 wheels/
 *.egg-info
+
 .idea
+/.idea
 .DS_Store
 *.iml
 /*.iml
