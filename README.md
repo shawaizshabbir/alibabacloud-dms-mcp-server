@@ -36,3 +36,6 @@ Add the following configuration to the MCP client configuration file:
   }
 }
 ```
+
+## License
+This project is licensed under the Apache 2.0 License.
