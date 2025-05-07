@@ -8,6 +8,9 @@ import logging
 
 mcp = FastMCP("dms-mcp-server")
 
+from alibabacloud_dms_enterprise20181101.client import Client as dms_enterprise20181101Client
+from alibabacloud_tea_openapi import models as open_api_models
+from alibabacloud_dms_enterprise20181101 import models as dms_enterprise_20181101_models
 
 def create_client() -> dms_enterprise20181101Client:
     """
@@ -20,8 +23,9 @@ def create_client() -> dms_enterprise20181101Client:
         access_key_secret=os.getenv('ALIBABA_CLOUD_ACCESS_KEY_SECRET', ""),
         security_token=os.getenv('ALIBABA_CLOUD_SECURITY_TOKEN')
     )
-    config.endpoint = f'dms-enterprise.cn-beijing.aliyuncs.com'
-    # config.endpoint = f'dms-enterprise-pre.cn-hangzhou.aliyuncs.com'
+    # TODO: 去掉这个
+    # config.endpoint = f'dms-enterprise.cn-beijing.aliyuncs.com'
+    config.endpoint = f'dms-enterprise-pre.cn-hangzhou.aliyuncs.com'
 
     return dms_enterprise20181101Client(config)
 
@@ -32,7 +36,6 @@ def create_client() -> dms_enterprise20181101Client:
             """)
 async def addInstance(db_user: str, db_password: str, instance_resource_id: Optional[str] = None,
                       host: Optional[str] = None, port: int = None, region: Optional[str] = None) -> Dict[str, Any]:
-
     if not db_user or not isinstance(db_user, str):
         logging.error("Invalid db_user parameter: %s", db_user)
         return "db_user must be a non-empty string"
@@ -294,7 +297,8 @@ async def getDatabase(host: str, port: int, schema_name: str, sid: Optional[str]
 async def listTables(database_id: int, search_name: str, page_number: int = 1, page_size: int = 200) -> Dict[str, Any]:
     client = create_client()
     list_table_request = dms_enterprise_20181101_models.ListTablesRequest(
-        search_name=search_name, database_id=database_id, page_number=page_number, page_size=page_size, return_guid=True)
+        search_name=search_name, database_id=database_id, page_number=page_number, page_size=page_size,
+        return_guid=True)
     try:
         response = client.list_tables(list_table_request)
         if response is None or not hasattr(response, 'body') or response.body is None:
@@ -392,9 +396,25 @@ async def executeScript(database_id: int, script: str, logic: bool = False) -> D
 
 
 @mcp.tool(name="nl2sql",
-          description="""
+          description="""Generate SQL from natural language questions about database data.
+          
+          This tool converts natural language questions into SQL queries that can be executed against a database.
+          If you don't have the database_id, use the searchDatabase tool first to identify the correct database.
+          
+          Parameters:
+            question (str): Natural language question about the database that needs to be converted to SQL.
+            database_id (int): DMS databaseId. If not provided, searchDatabase will be used first.
+            knowledge (Optional[str]): Additional context or database knowledge to improve SQL generation.
+          
+          Returns:
+            Dict[str, Any]: A dictionary containing:
+              - Sql (str): The generated SQL query based on the natural language question
+              - Tables (List[Dict]): Tables referenced in the query
+              - SimilarSql (List[Dict]): Similar SQL examples that may be helpful
+              - Success (bool): Whether the conversion was successful
+              - RequestId (str): Unique request identifier
           """)
-async def generateSqlFromNL(database_id: int, question: str, knowledge: Optional[str] = None, dialect: Optional[str] = None) -> Dict[str, Any]:
+async def nl2sql(database_id: int, question: str, knowledge: Optional[str] = None) -> Dict[str, Any]:
     if not isinstance(database_id, int) or database_id <= 0:
         error_msg = f"Invalid databaseId parameter: {database_id!r}"
         logging.error(error_msg)
@@ -410,8 +430,6 @@ async def generateSqlFromNL(database_id: int, question: str, knowledge: Optional
         db_id=database_id, question=question)
     if knowledge:
         generate_sql_from_nl_request.knowledge = knowledge
-    if dialect:
-        generate_sql_from_nl_request.dialect = dialect
     try:
         response = client.generate_sql_from_nl(generate_sql_from_nl_request)
         if response is None or not hasattr(response, 'body') or response.body is None:
