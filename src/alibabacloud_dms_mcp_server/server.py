@@ -181,6 +181,7 @@ async def searchDatabase(search_key: str, page_number: int = 1, page_size: int =
           Retrieve detailed information about a specific database from DMS.
           This tool fetches metadata for a database instance in the DMS
     based on connection parameters and schema name. Supports Oracle-specific SID specification.
+    If you don't know host port, please use searchDatabase tool instead.
           Parameters:
             host (str): Hostname or IP address of the database instance.
             port (str): Connection port number (valid range: 1-65535).
