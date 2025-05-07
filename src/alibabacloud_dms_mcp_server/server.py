@@ -20,9 +20,7 @@ def create_client() -> dms_enterprise20181101Client:
         access_key_secret=os.getenv('ALIBABA_CLOUD_ACCESS_KEY_SECRET', ""),
         security_token=os.getenv('ALIBABA_CLOUD_SECURITY_TOKEN')
     )
-    # TODO: 去掉这个
-    # config.endpoint = f'dms-enterprise.cn-beijing.aliyuncs.com'
-    config.endpoint = f'dms-enterprise-pre.cn-hangzhou.aliyuncs.com'
+    config.endpoint = f'dms-enterprise.cn-beijing.aliyuncs.com'
 
     return dms_enterprise20181101Client(config)
 
