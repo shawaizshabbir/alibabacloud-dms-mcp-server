@@ -31,7 +31,7 @@ def create_client() -> dms_enterprise20181101Client:
 
             """)
 async def addInstance(db_user: str, db_password: str, instance_resource_id: Optional[str] = None,
-                      host: Optional[str] = None, port: int = None, region: Optional[str] = None) -> Dict[str, Any]:
+                      host: Optional[str] = None, port: str = None, region: Optional[str] = None) -> Dict[str, Any]:
 
     if not db_user or not isinstance(db_user, str):
         logging.error("Invalid db_user parameter: %s", db_user)
@@ -80,12 +80,12 @@ async def addInstance(db_user: str, db_password: str, instance_resource_id: Opti
                     - InstanceType: Database Engine type
                     - InstanceAlias: Instance alias in DMS
             """)
-async def getInstance(host: str, port: int, sid: Optional[str] = None) -> Dict[str, Any]:
+async def getInstance(host: str, port: str, sid: Optional[str] = None) -> Dict[str, Any]:
     """
           Retrieve detailed instance information from DMS.
           Parameters:
             host (str): The hostname or IP address of the database instance
-            port (int): Connection port number (valid range: 1-65535)
+            port (str): Connection port number (valid range: 1-65535)
             sid (Optional[str]): Required for Oracle like databases. Defaults to None.
           Returns:
             Dict[str, Any]: A dictionary containing instance details with these keys:
@@ -97,10 +97,6 @@ async def getInstance(host: str, port: int, sid: Optional[str] = None) -> Dict[s
     if not host or not isinstance(host, str):
         logging.error("Invalid host parameter: %s", host)
         return "Host must be a non-empty string"
-
-    if not 1 <= port <= 65535:
-        logging.error("Invalid port value: %d", port)
-        return "Port must be between 1 and 65535"
 
     if sid is not None and not isinstance(sid, str):
         logging.error("Invalid sid parameter: %s", sid)
@@ -189,7 +185,7 @@ async def searchDatabase(search_key: str, page_number: int = 1, page_size: int =
     based on connection parameters and schema name. Supports Oracle-specific SID specification.
           Parameters:
             host (str): Hostname or IP address of the database instance.
-            port (int): Connection port number (valid range: 1-65535).
+            port (str): Connection port number (valid range: 1-65535).
             schema_name (str): Name of the database schema.
             sid (Optional[str], optional): Required for Oracle like databases. Defaults to None.
          Returns:
@@ -201,14 +197,10 @@ async def searchDatabase(search_key: str, page_number: int = 1, page_size: int =
                 - InstanceId: Instance identifier in DMS
                 - State: Current operational status
           """)
-async def getDatabase(host: str, port: int, schema_name: str, sid: Optional[str] = None) -> Dict[str, Any]:
+async def getDatabase(host: str, port: str, schema_name: str, sid: Optional[str] = None) -> Dict[str, Any]:
     if not isinstance(host, str) or not host.strip():
         logging.error("Invalid host parameter: %s", host)
         raise ValueError("Host must be a non-empty string")
-
-    if not isinstance(port, int) or not (1 <= port <= 65535):
-        logging.error("Invalid port value: %d", port)
-        raise ValueError("Port must be an integer between 1 and 65535")
 
     if not isinstance(schema_name, str) or not schema_name.strip():
         logging.error("Invalid schema_name parameter: %s", schema_name)
@@ -275,7 +267,7 @@ async def getDatabase(host: str, port: int, schema_name: str, sid: Optional[str]
           This tool allows searching for database tables in the DMS if databaseId is known. 
           If you don't known databaseId, you could obtained via getDatabase tool.
           Parameters:
-            database_id (int): Required databaseId (obtained via getDatabase tool) to scope the search.
+            database_id (str): Required databaseId (obtained via getDatabase tool) to scope the search.
             search_name (str): A non-empty string used as the search keyword. Used to match table names.
             page_number (int, optional): Pagination page number (default: 1).
             page_size (int, optional): Number of results per page (default: 200, max: 200).
@@ -291,7 +283,7 @@ async def getDatabase(host: str, port: int, schema_name: str, sid: Optional[str]
               TotalCount (int): Total number of matching tables across all pages
 
           """)
-async def listTables(database_id: int, search_name: str, page_number: int = 1, page_size: int = 200) -> Dict[str, Any]:
+async def listTables(database_id: str, search_name: str, page_number: int = 1, page_size: int = 200) -> Dict[str, Any]:
     client = create_client()
     list_table_request = dms_enterprise_20181101_models.ListTablesRequest(
         search_name=search_name, database_id=database_id, page_number=page_number, page_size=page_size, return_guid=True)
@@ -365,11 +357,7 @@ async def getMetaTableDetailInfo(table_guid: str) -> Dict[str, Any]:
             - Success (bool): Overall operation success status    
 
           """)
-async def executeScript(database_id: int, script: str, logic: bool = False) -> Dict[str, Any]:
-    if not isinstance(database_id, int) or database_id <= 0:
-        error_msg = f"Invalid databaseId parameter: {database_id!r}"
-        logging.error(error_msg)
-        raise ValueError("databaseId must be a positive integer")
+async def executeScript(database_id: str, script: str, logic: bool = False) -> Dict[str, Any]:
 
     if not isinstance(script, str) or not script.strip():
         error_msg = "Script parameter must be a non-empty string"
@@ -394,11 +382,7 @@ async def executeScript(database_id: int, script: str, logic: bool = False) -> D
 @mcp.tool(name="nl2sql",
           description="""
           """)
-async def generateSqlFromNL(database_id: int, question: str, knowledge: Optional[str] = None, dialect: Optional[str] = None) -> Dict[str, Any]:
-    if not isinstance(database_id, int) or database_id <= 0:
-        error_msg = f"Invalid databaseId parameter: {database_id!r}"
-        logging.error(error_msg)
-        raise ValueError("databaseId must be a positive integer")
+async def generateSqlFromNL(database_id: str, question: str, knowledge: Optional[str] = None, dialect: Optional[str] = None) -> Dict[str, Any]:
 
     if not isinstance(question, str) or not question.strip():
         error_msg = "Question parameter must be a non-empty string"
