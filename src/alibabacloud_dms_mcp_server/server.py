@@ -8,9 +8,6 @@ import logging
 
 mcp = FastMCP("dms-mcp-server")
 
-from alibabacloud_dms_enterprise20181101.client import Client as dms_enterprise20181101Client
-from alibabacloud_tea_openapi import models as open_api_models
-from alibabacloud_dms_enterprise20181101 import models as dms_enterprise_20181101_models
 
 def create_client() -> dms_enterprise20181101Client:
     """
