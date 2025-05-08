@@ -1,3 +1,7 @@
+<!-- 顶部语言切换 -->
+
+<p align="center"><a href="../README.md">English</a> | 中文<br></p>
+
 # AlibabaCloud DMS MCP Server
 
 **AI 首选的统一数据管理网关，支持30多种数据源**连接的多云通用数据MCP Server，一站式解决**跨源数据安全访问**。
@@ -5,7 +9,7 @@
 - 支持阿里云全系：RDS、PolarDB、ADB系列、Lindorm系列、TableStore系列、Maxcompute系列。
 - 支持主流数据库/数仓：MySQL、MariaDB、PostgreSQL、Oracle、SQLServer、Redis、MongoDB、StarRocks、Clickhouse、SelectDB、DB2、OceanBase、Gauss、BigQuery等。
 
-![architecture](images/architecture-0508.jpg)
+<img src="../images/architecture-0508.jpg" alt="Ding" width="60%">
 
 ---
 
@@ -78,6 +82,12 @@ git clone https://github.com/aliyun/alibabacloud-dms-mcp-server.git
 ```
 
 ---
+
+## Contact us
+
+如果您有使用问题或建议, 请加入[Alibaba Cloud DMS MCP讨论组](https://h5.dingtalk.com/circle/joinCircle.html?corpId=dinga0bc5ccf937dad26bc961a6cb783455b&token=2f373e6778dcde124e1d3f22119a325b&groupCode=v1,k1) (钉钉群号: 113455011677) 进行讨论.
+
+<img src="../images/ding-en.jpg" alt="Ding" width="40%">
 
 
 ## License

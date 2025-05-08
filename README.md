@@ -1,24 +1,71 @@
-# Alibaba Cloud DMS MCP Server
+<!-- 顶部语言切换 -->
 
-A Model Context Protocol server for Alibaba Cloud DMS(Data Management).
+<p align="center">English | <a href="/doc/README-zh-cn.md">中文</a><br></p>
 
-This server facilitates unified metadata access and cross-engine data querying for large language models working with diverse database ecosystems.
+
+# AlibabaCloud DMS MCP Server
+
+**AI-powered unified data management gateway** that supports connection to over 30+ data sources, serving as a multi-cloud universal data MCP Server to address cross-source data secure access in one-stop solution.
+
+- Supports full Alibaba Cloud series: RDS, PolarDB, ADB series, Lindorm series, TableStore series, MaxCompute series.
+- Supports mainstream databases/warehouses: MySQL, MariaDB, PostgreSQL, Oracle, SQLServer, Redis, MongoDB, StarRocks, Clickhouse, SelectDB, DB2, OceanBase, Gauss, BigQuery, etc.
+
+<img src="images/architecture-0508.jpg" alt="Ding" width="60%">
+
 
 ---
 
-## Overview  
-**DMS MCP Server** provides:  
-- Standardized interface for database metadata operations  
+## Core Features
+Provides AI with a unified **data access layer** and **metadata access layer**, solving through standardized interfaces:
+- Maintenance costs caused by data source fragmentation
+- Compatibility issues between heterogeneous protocols
+- Security risks from uncontrolled account permissions and non-auditable operations
+
+Key features via MCP include:
+- **NL2SQL**: Execute SQL via natural language to obtain data results
+- **Code Generation**: Retrieve schema information through this service to generate DAO code or perform structural analysis
+- **Data Retrieval**: Automatically route SQL to accurate data sources for business support
+- **Security**: Fine-grained access control and auditability
+
 
 ---
 
-## Configuration  
-Download from Github
-```shell
+## Supported Data Sources
+| DataSource/Tool       | **NL2SQL** *nlsql* | **Execute script** *executeScript* | **Show schema** *getTableDetailInfo* | **Access control** *default* | **Audit log** *default* |
+|-----------------------|--------------------|------------------------------------|--------------------------------------|-----------------------------|------------------------|
+| MySQL                 | ✅                  | ✅                                  | ✅                                    | ✅                           | ✅                      |
+| MariaDB               | ✅                  | ✅                                  | ✅                                    | ✅                           | ✅                      |
+| PostgreSQL            | ✅                  | ✅                                  | ✅                                    | ✅                           | ✅                      |
+| Oracle                | ✅                  | ✅                                  | ✅                                    | ✅                           | ✅                      |
+| SQLServer             | ✅                  | ✅                                  | ✅                                    | ✅                           | ✅                      |
+| Redis                 | ✅                  | ✅                                  | ✅                                    | ✅                           | ✅                      |
+| MongoDB               | ✅                  | ✅                                  | ✅                                    | ✅                           | ✅                      |
+| StarRocks             | ✅                  | ✅                                  | ✅                                    | ✅                           | ✅                      |
+| Clickhouse            | ✅                  | ✅                                  | ✅                                    | ✅                           | ✅                      |
+| SelectDB              | ✅                  | ✅                                  | ✅                                    | ✅                           | ✅                      |
+| DB2                   | ✅                  | ✅                                  | ✅                                    | ✅                           | ✅                      |
+| OceanBase             | ✅                  | ✅                                  | ✅                                    | ✅                           | ✅                      |
+| Gauss                 | ✅                  | ✅                                  | ✅                                    | ✅                           | ✅                      |
+| BigQuery              | ✅                  | ✅                                  | ✅                                    | ✅                           | ✅                      |
+| PolarDB               | ✅                  | ✅                                  | ✅                                    | ✅                           | ✅                      |
+| PolarDB-X             | ✅                  | ✅                                  | ✅                                    | ✅                           | ✅                      |
+| AnalyticDB            | ✅                  | ✅                                  | ✅                                    | ✅                           | ✅                      |
+| Lindorm               | ✅                  | ✅                                  | ✅                                    | ✅                           | ✅                      |
+| TableStore            | ✅                  | ✅                                  | ✅                                    | ✅                           | ✅                      |
+| Maxcompute            | ✅                  | ✅                                  | ✅                                    | ✅                           | ✅                      |
+| Hologres              | ✅                  | ✅                                  | ✅                                    | ✅                           | ✅                      |
+
+---
+
+## Getting Started
+### Download the Code
+```bash
 git clone https://github.com/aliyun/alibabacloud-dms-mcp-server.git
 ```
-Add the following configuration to the MCP client configuration file:
-```json5
+
+### Configure MCP Client
+Add the following content to the configuration file:
+```json
 "mcpServers": {
   "dms-mcp-server": {
     "command": "uv",
@@ -31,11 +78,20 @@ Add the following configuration to the MCP client configuration file:
     "env": {
       "ALIBABA_CLOUD_ACCESS_KEY_ID": "access_id",
       "ALIBABA_CLOUD_ACCESS_KEY_SECRET": "access_key",
-      "ALIBABA_CLOUD_SECURITY_TOKEN": "sts_security_token"  // optional, required when using STS Token
+      "ALIBABA_CLOUD_SECURITY_TOKEN": "sts_security_token optional, required when using STS Token"
     }
   }
 }
 ```
+
+---
+
+## Contact us
+
+For any questions or suggestions, join the[Alibaba Cloud DMS MCP Group](https://h5.dingtalk.com/circle/joinCircle.html?corpId=dinga0bc5ccf937dad26bc961a6cb783455b&token=2f373e6778dcde124e1d3f22119a325b&groupCode=v1,k1) (DingTalk Group ID: 113455011677) .
+
+<img src="images/ding-en.jpg" alt="Ding" width="40%">
+
 
 ## License
 This project is licensed under the Apache 2.0 License.
