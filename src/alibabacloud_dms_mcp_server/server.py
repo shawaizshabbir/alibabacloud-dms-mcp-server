@@ -30,7 +30,7 @@ def create_client() -> dms_enterprise20181101Client:
 
             """)
 async def addInstance(db_user: str, db_password: str, instance_resource_id: Optional[str] = None,
-                      host: Optional[str] = None, port: str = None, region: Optional[str] = None) -> Dict[str, Any]:
+                      host: Optional[str] = None, port: Optional[str] = None, region: Optional[str] = None) -> Dict[str, Any]:
     if not db_user or not isinstance(db_user, str):
         logging.error("Invalid db_user parameter: %s", db_user)
         return "db_user must be a non-empty string"
@@ -49,7 +49,7 @@ async def addInstance(db_user: str, db_password: str, instance_resource_id: Opti
     if port:
         add_instance_request.port = port
     if instance_resource_id:
-        add_instance_request.instance_resource_id = instance_resource_id
+        add_instance_request.instance_id = instance_resource_id
     if region:
         add_instance_request.region = region
     try:
@@ -181,6 +181,7 @@ async def searchDatabase(search_key: str, page_number: int = 1, page_size: int =
           Retrieve detailed information about a specific database from DMS.
           This tool fetches metadata for a database instance in the DMS
     based on connection parameters and schema name. Supports Oracle-specific SID specification.
+    If you don't know host port, please use searchDatabase tool instead.
           Parameters:
             host (str): Hostname or IP address of the database instance.
             port (str): Connection port number (valid range: 1-65535).
